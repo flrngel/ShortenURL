@@ -8,7 +8,7 @@ class ShortController < ApplicationController
 			@res={"result"=>"true", "url"=>idx.to_i.base62_encode}
 		else
 			idx=$redis.incr("idx")
-			if ($redis.set(idx, url) == "OK") and ($redis.set(url,idx) == "OK")
+			if ($redis.set(idx, url) == "OK") and ($redis.set(url,idx) == "OK") and ($redis.expire(idx,params[:expire].to_i) and $redis.expire(url,params[:expire].to_i) if params[:expire].to_i>0)
 				@res={"result"=>"true", "url"=>idx.to_i.base62_encode}
 			else
 				@res={"result"=>"false"}

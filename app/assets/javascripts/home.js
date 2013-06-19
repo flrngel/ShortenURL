@@ -3,9 +3,12 @@ $("#shortBtn").click(function(){
 		$("#urlprint").html("Empty url");
 		return;
 	}
+	var expire=0;
+	if( $("#expire_radio2").prop("checked") == true ) expire=$("#expire").val();
 	$.ajax({
 		data:{
-			'url':$("#url").val()
+			'url':$("#url").val(),
+			'expire':expire
 		},
 		dataType:'json',
 		type:'POST',
@@ -29,4 +32,8 @@ $("#url").keypress(function(e){
 	if( code == 13 ){
 		$("#shortBtn").trigger("click");
 	}
+});
+
+$("#expire").focus(function(){
+	$("#expire_radio2").prop("checked",true);
 });
