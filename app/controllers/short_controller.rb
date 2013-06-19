@@ -18,7 +18,11 @@ class ShortController < ApplicationController
 	end
 
 	def show
-		url=$redis.get(params[:id].base62_decode)
-		redirect_to url, :status => 301
+		if $redis.exists(params[:id].base62_decode)
+			url=$redis.get(params[:id].base62_decode)
+			redirect_to url, :status => 301
+		else
+			raise ActionController::RoutingError.new('Not Found')
+		end
 	end
 end
