@@ -3,7 +3,7 @@ $("#shortBtn").click(function(){
 		$("#urlprint").html("Empty url");
 		return;
 	}
-	var expire=0;
+	var expire=-1;
 	if( $("#expire_radio2").prop("checked") == true ) expire=$("#expire").val();
 	$.ajax({
 		data:{
