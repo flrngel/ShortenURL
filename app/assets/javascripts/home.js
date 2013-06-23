@@ -16,13 +16,16 @@ $("#shortBtn").click(function(){
 		success:function(data){
 			if( data.result == "true" ){
 				$("#urlprint").html("http://flx.kr/"+data.url);
+				$("#link").attr("href","http://flx.kr/"+data.url);
 			}
 			else{
 				$("#urlprint").html("something went wrong");
+				$("#link").attr("href","https://github.com/flrngel/ShortenURL");
 			}
 		},
 		error:function(xhr, ajaxOptions, err){
 			$("#urlprint").html("someting went wrong");
+			$("#link").attr("href","https://github.com/flrngel/ShortenURL");
 		}
 	});
 });
