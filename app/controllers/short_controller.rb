@@ -1,6 +1,12 @@
 class ShortController < ApplicationController
 	def create
 		url=params[:url].to_s
+
+		while url != URI::unescape(url) do
+			url=URI::unescape(url)
+		end
+
+		url=URI::escape(url)
 		url="http://" + url if URI.parse(url).scheme.nil?
 
 		if $redis.exists(url)
