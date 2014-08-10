@@ -9,11 +9,15 @@ class ShortController < ApplicationController
 		url=URI::escape(url)
 		url="http://" + url if URI.parse(url).scheme.nil?
 		
-		Random.rand(77).each do |lalala|
-			idx=$redis.incr("short:idx")
+		jump_seed=Random.rand(77)
+		idx=0
+		1.upto(jump_seed) do |lalala|
+			idx=$redis.incr("shorten:idx")
 		end
+
 		expire=params[:expire].to_i
-		if $redis.set("short:"+idx.to_s, url) == "OK"
+		if $redis.set("shorten:url:"+idx.to_s, url) == "OK"
+			$redis.incr("shorten:total")
 			flag=false	
 			if expire > 0
 				if $redis.expire(idx,expire) and $redis.expire(url,expire)
@@ -36,7 +40,7 @@ class ShortController < ApplicationController
 	end
 
 	def show
-		key="short:"+Passy.new(params[:id].to_s).decrypt.base62_decode.to_s
+		key="shorten:url:"+Passy.new(params[:id].to_s).decrypt.base62_decode.to_s
 		if $redis.exists(key)
 			url=$redis.get(key)
 			url=URI::unescape(url)

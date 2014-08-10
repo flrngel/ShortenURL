@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
 	def index
-		@dbsize=($redis.get("short:idx").to_i)
+		@dbsize=($redis.get("shorten:total").to_i)
 	end
 end
