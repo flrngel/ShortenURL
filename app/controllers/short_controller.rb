@@ -39,6 +39,7 @@ class ShortController < ApplicationController
 		key="short:"+Passy.new(params[:id].to_s).decrypt.base62_decode.to_s
 		if $redis.exists(key)
 			url=$redis.get(key)
+			url=URI::unescape(url)
 			redirect_to url, :status => 301
 		else
 			raise ActionController::RoutingError.new('Not Found')
