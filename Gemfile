@@ -11,7 +11,6 @@ gem 'less-rails'
 gem 'execjs'
 gem 'therubyracer'
 gem 'sqlite3'
-gem 'crypt-rot13'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -39,7 +39,6 @@ GEM
       execjs
     coffee-script-source (1.7.1)
     commonjs (0.2.7)
-    crypt-rot13 (1.0.5)
     erubis (2.7.0)
     execjs (2.2.1)
     hike (1.2.3)
@@ -123,7 +122,6 @@ PLATFORMS
 DEPENDENCIES
   base62
   coffee-rails (~> 3.2.1)
-  crypt-rot13
   execjs
   jquery-rails
   less-rails

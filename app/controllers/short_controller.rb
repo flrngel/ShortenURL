@@ -9,37 +9,34 @@ class ShortController < ApplicationController
 		url=URI::escape(url)
 		url="http://" + url if URI.parse(url).scheme.nil?
 
-		if $redis.exists(url)
-			idx=$redis.get(url)
-			@res={"result"=>"true", "url"=>idx.to_i.base62_encode}
-		else
-			idx=$redis.incr("idx")
-			expire=params[:expire].to_i
-			if ($redis.set(idx, url) == "OK") and ($redis.set(url,idx) == "OK")
-				flag=false	
-				if expire > 0
-					if $redis.expire(idx,expire) and $redis.expire(url,expire)
-						flag=true
-					end
-				else
+		idx=$redis.incr("short:idx")
+		expire=params[:expire].to_i
+		if $redis.set("short:"+idx.to_s, url) == "OK"
+			flag=false	
+			if expire > 0
+				if $redis.expire(idx,expire) and $redis.expire(url,expire)
 					flag=true
 				end
+			else
+				flag=true
+			end
 
-				if flag == true
-					@res={"result"=>"true", "url"=>idx.to_i.base62_encode}
-				else
-					@res={"result"=>"false"}
-				end
+			if flag == true
+				@res={"result"=>"true", "url"=>Passy.new(idx.to_i.base62_encode).encrypt}
 			else
 				@res={"result"=>"false"}
 			end
+		else
+			@res={"result"=>"false"}
 		end
+
 		render :json => @res
 	end
 
 	def show
-		if $redis.exists(params[:id].base62_decode)
-			url=$redis.get(params[:id].base62_decode)
+		key="short:"+Passy.new(params[:id].base62_decode).decrypt
+		if $redis.exists(key)
+			url=$redis.get(key)
 			redirect_to url, :status => 301
 		else
 			raise ActionController::RoutingError.new('Not Found')
