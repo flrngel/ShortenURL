@@ -36,7 +36,7 @@ class ShortController < ApplicationController
 	end
 
 	def show
-		key="short:"+Passy.new(params[:id].base62_decode).decrypt
+		key="short:"+Passy.new(params[:id].to_s).decrypt.base62_decode.to_s
 		if $redis.exists(key)
 			url=$redis.get(key)
 			redirect_to url, :status => 301
