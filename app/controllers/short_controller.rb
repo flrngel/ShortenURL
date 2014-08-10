@@ -8,8 +8,10 @@ class ShortController < ApplicationController
 
 		url=URI::escape(url)
 		url="http://" + url if URI.parse(url).scheme.nil?
-
-		idx=$redis.incr("short:idx")
+		
+		Random.rand(77).each do |lalala|
+			idx=$redis.incr("short:idx")
+		end
 		expire=params[:expire].to_i
 		if $redis.set("short:"+idx.to_s, url) == "OK"
 			flag=false	
