@@ -16,11 +16,12 @@ class ShortController < ApplicationController
 		end
 
 		expire=params[:expire].to_i
-		if $redis.set("shorten:url:"+idx.to_s, url) == "OK"
+		key = "shorten:url:"+idx.to_s
+		if $redis.set(key, url) == "OK"
 			$redis.incr("shorten:total")
 			flag=false	
 			if expire > 0
-				if $redis.expire(idx,expire) and $redis.expire(url,expire)
+				if $redis.expire(key,expire)
 					flag=true
 				end
 			else
